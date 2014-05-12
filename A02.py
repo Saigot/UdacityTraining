@@ -1,24 +1,17 @@
-import webapp2
+import handler
 import cgi
 import re
 #----------------Assignment02--------------------#
-        
-formA02 = """<form method="post">
-            <p><b>Sign Up</b></p>
-            <p>User:<input type="text" name = "username" value=%(usr)s><font color=\"red\">%(usrEr)s</font></p>
-            <p>Pswd:<input type="password" name = "password"><font color=\"red\">%(pswdEr)s</font></p>
-            <p>Verify:<input type="password" name = "verify"></p>
-            <p>Email:<input type="text" name = "email" value=%(email)s><font color=\"red\">%(emailEr)s</font></p>
-            <p><input type="Submit" name="Submit"></p>
-            <p> <a href="/"> Home </a></p>
-            </form>"""
+
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 PSWD_RE = re.compile(r"^.{3,20}$")
 EMAIL_RE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
-class Assignment02(webapp2.RequestHandler):
+class Assignment02(handler.Handler):
+    def renderFront(self, usr="",email="",pswdEr="",usrEr="",emailEr=""):
+        self.render("A02.html",usr = usr, email=email,
+                    usrEr=usrEr, emailEr=emailEr, pswdEr = pswdEr)
     def get(self):
-        self.response.write(formA02 %{"usr":"","email":"","pswdEr":""
-                                      ,"emailEr":"","usrEr":""})
+        self.renderFront()
     def post(self):
         usr = self.request.get("username")
         pwd1 = self.request.get("password")
@@ -30,8 +23,7 @@ class Assignment02(webapp2.RequestHandler):
         if(e == "" and p == "" and u == ""):
             self.redirect("/A02SignUp/Welcome?Usr=%s" %usr)
         else:
-            self.response.write(formA02 %{"usr":usr,"email":email,
-                                          "pswdEr":p, "emailEr":e,"usrEr":u})
+            self.renderFront(usr,email,p,u,e)
     def EmailCheck(self,text):
         if(EMAIL_RE.match(text) or text == ""):
             return ""
@@ -47,7 +39,7 @@ class Assignment02(webapp2.RequestHandler):
             return ""
         else:
             return "Sorry, that's not a valid User"
-class Welcome(webapp2.RequestHandler):
+class Welcome(handler.Handler):
     def get(self):
         name=self.request.get("Usr")
         self.response.write("Welcome %s" %name)

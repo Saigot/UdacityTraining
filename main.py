@@ -15,32 +15,18 @@
 # limitations under the License.
 #
 import webapp2
-import cgi
 import A01
 import A02
-formMain="""<form method="get">
-        <p> <a href="/A01ROT13"> Assignmnt 1:Rot13 </a></p>
-        <p> <a href="/A02SignUp"> Assignmnt 2:Signup </a></p>
-        </form>"""
+import A03
+import handler
 
-
-class MainHandler(webapp2.RequestHandler):
+class MainHandler(handler.Handler):
     def get(self):
-        string = ""
-        self.response.write(formMain)
-        
-    def post(self):
-        Text = self.request.get("text")
-        self.response.write(formMain)
-
-
-
-                            
-    
-
+        self.render("main.html")
 #----------------------End Stuff----------------------#
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/A01ROT13', A01.Assignment01),
-    ('/A02SignUp', A02.Assignment02),('/A02SignUp/Welcome', A02.Welcome)
+    ('/A02SignUp', A02.Assignment02),('/A02SignUp/Welcome', A02.Welcome),
+    ('/A03Blog',A03.Assignment03), ('/A03Blog/newpost',A03.NewPost),(r'/A03Blog/(\d+)',A03.PostHandler), 
     ], debug=True)

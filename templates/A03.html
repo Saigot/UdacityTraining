@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<style>
+.Heading{
+	position: relative;
+	border-bottom: 3px solid #666;
+    text-decoration: none;
+}
+.Date{
+	position: absolute;
+    right: 0px;
+    bottom: 0px;
+    color: #999;
+	text-decoration: none;
+}
+a {
+    font-size: 24px;
+    font-weight: bold;
+	color: #222;
+	text-decoration: none;
+}
+</style>
+<html>
+		<body>
+    <h1>Blog</h1>
+	<a href="/A03Blog/newpost"> submit a post </a>
+    <hr>
+	<hr>
+    {% for b in Blog %}
+    <div class="Heading">
+		<div>
+        <a href="/A03Blog/{{b.key().id()}}">{{b.title}}</a>
+		</div>
+		<div class="Date">
+		{{"{:%d, %b %Y}".format(b.created)}}
+		</div>
+	</div>
+	
+        <p>{{b.body}}</p>
+    
+    {% endfor %}
+</body>
+</html>
